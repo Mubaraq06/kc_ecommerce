@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+
+{% block header %}
+    {% include 'header.html' %}
+{% endblock header %}
+
+
+{% block carousel %}
+    {% include 'carousel.html' %}
+{% endblock carousel %}
+
+
+{% block content %}
+    <div class="container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Img</th>
+            <th scope="col"></th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+            <th scope="col">Amount</th>
+          </tr>
+        </thead>
+       
+        <tbody>
+          
+          {% for items in basket %}
+              <tr>
+                <th scope="row">
+                  <form action="{% url 'deleteitems' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="items_id" value="{{items.id}}">
+                    <button class="btn" onclick="return confirm('Are you sure you want to delete this item?...')">
+                      <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                  </form>
+                </th>
+                <td>{{items.product.title}}</td>
+                <td><img src="{{items.product.img.url}}" width="50px" height="50px" alt=""></td>
+                <td>{{items.quantity}}</td>
+                <td>
+                <form action="{% url 'modifycart' %}" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="product_id" value="{{items.id}}">
+                  <input type="number" name="quantity" max="10" min="1" value="1">
+                  <button type="submit" onclick="return confirm('Are you sure you want to modify this product?...')" class="btn"><i class="fa-solid fa-circle-check"></i></button>
+                </form></td>
+                <td>{{items.price|floatformat:2|intcomma}}</td>
+                <td>{{items.amount|floatformat:2|intcomma}}</td>
+              </tr>
+          {% endfor %}
+            
+          
+          <!-- <tr>
+            <th scope="row">
+              <form action="">
+                <input type="hidden">
+                <button class="btn">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </form>
+            </th>
+            <td>Shoe1</td>
+            <td><img src="/img/shoe2.jpg" width="50px" height="50px" alt=""></td>
+            <td><form action="">
+              <input type="hidden">
+              <input type="number" max="10" min="1" value="1">
+              <button type="submit" class="btn"><i class="fa-solid fa-circle-check"></i></button>
+            </form></td>
+            <td>#700</td>
+            <td>#7500</td>
+          </tr>
+          <tr>
+            <th scope="row">
+              <form action="">
+                <input type="hidden">
+                <button class="btn">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </form>
+            </th>
+            <td>Shoe1</td>
+            <td><img src="/img/shoe1 (1).jpg" width="50px" height="50px" alt=""></td>
+            <td><form action="">
+              <input type="hidden">
+              <input type="number" max="10" min="1" value="1">
+              <button type="submit" class="btn"><i class="fa-solid fa-circle-check"></i></button>
+            </form></td>
+            <td>#700</td>
+            <td>#7500</td>
+          </tr> -->
+        </tbody>
+      </table>
+
+      <div class="table">
+        <table class="table">
+          <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>Subtotal: {{subtotal|floatformat:2|intcomma}}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>VAT(7.5%): {{vat|floatformat:2|intcomma}}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>Total: {{total|floatformat:2|intcomma}}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><a href="{% url 'checkout' %}" class="btn btn-outline-secondary">Checkout</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+{% endblock content %}
+
+{% block footer %}
+    {% include 'footer.html' %}
+{% endblock footer %}
+  
+    
+    
+    
